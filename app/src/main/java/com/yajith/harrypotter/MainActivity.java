@@ -90,13 +90,13 @@ public class MainActivity extends AppCompatActivity {
                             count++;
                             if(randNumber==told_number)
                             {
-                                //tell crt and open
+                                //todo tell crt and open
                             }
                             else {
-                                //tell wrong
+                                //todo tell wrong
                                 if(count==4)
                                 {
-                                    //tell last chance over
+                                    //todo tell last chance over
                                     count=1;
                                 }
                             }
