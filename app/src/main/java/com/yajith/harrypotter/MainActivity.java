@@ -1,11 +1,14 @@
 package com.yajith.harrypotter;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -84,18 +87,36 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> result = data.getStringArrayListExtra(
                             RecognizerIntent.EXTRA_RESULTS);
                     String re=Objects.requireNonNull(result).get(0).toString();
+                    Log.i("told",re);
                     if(!re.equals("")){
                         try {
-                            told_number=Integer.getInteger(re);
+                            told_number=Integer.parseInt(re);
                             count++;
                             if(randNumber==told_number)
                             {
                                 //todo tell crt and open
+                                Toast.makeText(this, "crt", Toast.LENGTH_SHORT).show();
+
+                                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+                                builder.setTitle("Congrats!");
+                                builder.setMessage("You Found the number. Book is now unlocked");
+                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        count=1;
+                                        randNumber=getrandom();
+                                       dialog.dismiss();
+                                    }
+                                });
+                                AlertDialog alertDialog=builder.create();
+                                alertDialog.show();
                             }
                             else {
                                 //todo tell wrong
+                                Toast.makeText(this, "try again", Toast.LENGTH_SHORT).show();
                                 if(count==4)
                                 {
+                                    Toast.makeText(this, "over", Toast.LENGTH_SHORT).show();
                                     //todo tell last chance over
                                     count=1;
                                 }
@@ -105,6 +126,37 @@ public class MainActivity extends AppCompatActivity {
                             if(numbers.containsKey(re))
                             {
                                 told_number=numbers.get(re);
+                                if(randNumber==told_number)
+                                {
+                                    //todo tell crt and open
+                                    Toast.makeText(this, "crt", Toast.LENGTH_SHORT).show();
+
+                                    AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+                                    builder.setTitle("Congrats!");
+                                    builder.setMessage("You Found the number. Book is now unlocked");
+                                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            count=1;
+                                            randNumber=getrandom();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    AlertDialog alertDialog=builder.create();
+                                    alertDialog.show();
+                                }
+                                else {
+                                    //todo tell wrong
+                                    Toast.makeText(this, "try again", Toast.LENGTH_SHORT).show();
+                                    if(count==4)
+                                    {
+                                        Toast.makeText(this, "over the number is "+randNumber, Toast.LENGTH_SHORT).show();
+                                        //todo tell last chance over
+
+                                        count=1;
+                                        randNumber=getrandom();
+                                    }
+                                }
                             }
                         }
                     }
